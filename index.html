@@ -77,7 +77,7 @@ button{font-family:inherit;border:none;background:none;color:inherit;cursor:poin
 input,select,textarea{font-family:inherit;color:inherit}
 input:focus,select:focus,textarea:focus{outline:none}
 
-.app{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding-bottom:88px;position:relative;z-index:1}
+.app{max-width:520px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding-bottom:150px;position:relative;z-index:1}
 
 .topbar{position:sticky;top:0;z-index:50;background:var(--topbar-bg);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
 .topbar h1{font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:center;gap:8px}
@@ -178,6 +178,7 @@ h2.title{font-family:var(--font-display);font-size:13px;text-transform:uppercase
 .field input,.field select,.field textarea{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 14px;font-size:15px;color:var(--text);transition:border-color 0.2s,box-shadow 0.2s}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent-dim);box-shadow:0 0 0 3px var(--accent-bg)}
 .field input[type=date]{color-scheme:dark}
+html[data-theme="light"] .field input[type=date]{color-scheme:light}
 .field .hint{font-size:11px;color:var(--text-faint);margin-top:4px}
 .field .suggestion{display:inline-flex;align-items:center;gap:6px;background:var(--accent-bg);color:var(--accent);font-size:12px;padding:7px 11px;border-radius:8px;margin-top:8px;cursor:pointer;border:1px solid rgba(147,197,253,0.15)}
 
@@ -245,6 +246,36 @@ h2.title{font-family:var(--font-display);font-size:13px;text-transform:uppercase
 .theme-opt.active .theme-label{color:var(--accent)}
 
 ::-webkit-scrollbar{display:none}
+
+
+/* ================= v2: experiência ================= */
+.insights{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:6px 11px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim)}
+.chip.up{color:#fca5a5;background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.2)}
+.chip.down{color:#86efac;background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.2)}
+html[data-theme="light"] .chip.up{color:#dc2626}
+html[data-theme="light"] .chip.down{color:#16a34a}
+.chip strong{color:var(--text);font-family:var(--font-display)}
+.see-all{float:right;font-size:11px;color:var(--accent);text-transform:none;letter-spacing:0;font-weight:600;cursor:pointer}
+.search{display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0 12px;transition:border-color .2s,box-shadow .2s}
+.search:focus-within{border-color:var(--accent-dim);box-shadow:0 0 0 3px var(--accent-bg)}
+.search svg{width:17px;height:17px;color:var(--text-faint);flex-shrink:0}
+.search input{flex:1;background:none;border:none;padding:13px 0;font-size:15px;color:var(--text);min-width:0}
+.search input::-webkit-search-cancel-button{display:none}
+.search button{color:var(--text-faint);font-size:20px;line-height:1;padding:4px;display:none}
+.search.has button{display:block}
+.quick{display:flex;gap:7px;overflow-x:auto;margin-top:9px;padding-bottom:2px;scrollbar-width:none}
+.quick button{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:7px 11px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim);transition:transform .15s,border-color .2s}
+.quick button:active{transform:scale(.95);border-color:var(--accent)}
+.quick-label{font-size:10px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-top:12px}
+.toast.action{pointer-events:auto;display:flex;align-items:center;gap:14px;padding:10px 10px 10px 20px}
+.toast .tbtn{background:var(--accent);color:#0a0a0b;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700}
+.month-stats{display:flex;gap:10px;margin-bottom:12px}
+.month-stats div{flex:1;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
+.month-stats span{display:block;font-size:10px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.month-stats b{display:block;font-family:var(--font-display);font-size:15px;margin-top:3px}
+.backup-note{font-size:12px;color:var(--text-faint);margin-top:10px}
+html[data-theme="light"] .toast{background:rgba(24,24,27,.94);color:#fafafa;border-color:transparent}
 
 /* ================= SPLASH / BOAS-VINDAS ================= */
 @property --sw{syntax:'<angle>';inherits:true;initial-value:0deg}
@@ -320,14 +351,13 @@ html[data-theme="light"] .sp-greet{color:#52525b}
 }
 
 /* ================= LANÇAMENTO POR VOZ ================= */
-.fab-mic{position:fixed;bottom:162px;right:50%;transform:translateX(min(50%,250px)) translateX(-6px);width:48px;height:48px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-strong);color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);z-index:40;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
-.fab-mic:active{transform:translateX(min(50%,250px)) translateX(-6px) scale(.88)}
+.fab-mic{position:fixed;bottom:96px;right:50%;transform:translateX(min(50%,250px)) translateX(-74px);width:48px;height:48px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-strong);color:var(--accent);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);z-index:40;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.fab-mic:active{transform:translateX(min(50%,250px)) translateX(-74px) scale(.88)}
 .fab-mic svg,.m-mic svg{width:22px;height:22px}
-.modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
 .modal-head h3{margin-bottom:0!important}
 .m-mic{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:var(--accent-bg);border:1px solid rgba(147,197,253,.18);color:var(--accent);font-size:12px;font-weight:600}
 .m-mic svg{width:16px;height:16px}
-.modal-head + *{margin-top:16px}
 
 .voice-bg{position:fixed;inset:0;z-index:150;background:rgba(4,4,6,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;animation:fadeIn .2s}
 html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
@@ -380,7 +410,10 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
       <span>·</span>
       <span>média <strong id="hero-avg">R$ 0</strong>/dia</span>
     </div>
+    <div class="insights" id="hero-insights"></div>
   </div>
+
+  <div id="backup-alert"></div>
 
   <div id="budget-alert"></div>
 
@@ -411,6 +444,11 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
 
   <h2 class="title">Categorias</h2>
   <div class="category-list" id="category-list"></div>
+
+  <div id="recent-wrap">
+    <h2 class="title">Últimos lançamentos <span class="see-all" onclick="showPage('lancamentos')">Ver todos ›</span></h2>
+    <div class="lancamentos" id="recent-list"></div>
+  </div>
 </section>
 
 <section class="section" id="page-lancamentos">
@@ -418,6 +456,7 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
     <div class="label">Histórico</div>
     <div style="font-family:var(--font-display);font-size:25px;font-weight:700;letter-spacing:-0.03em" id="lanc-count-hero">0 lançamentos</div>
   </div>
+  <div style="padding:0 20px 16px"><div class="search" id="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="lanc-search" placeholder="Buscar em todos os meses" autocomplete="off" enterkeyhint="search"><button id="lanc-search-clear" aria-label="Limpar busca">×</button></div></div>
   <div class="lancamentos" id="lancamentos-list"></div>
 </section>
 
@@ -428,6 +467,12 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
   </div>
 
   <div style="padding:0 20px">
+    <div class="chart-wrap">
+      <div class="chart-title">Últimos 6 meses</div>
+      <div class="month-stats" id="month-stats"></div>
+      <div style="position:relative;height:190px"><canvas id="chart-months" role="img" aria-label="Total por mês"></canvas></div>
+    </div>
+
     <div class="chart-wrap">
       <div class="chart-title">Por categoria</div>
       <div class="legend" id="legend-pie"></div>
@@ -497,13 +542,6 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
     </div>
   </div>
 
-  <h2 class="title">Mês ativo</h2>
-  <div style="padding:0 20px">
-    <div class="field">
-      <input type="month" id="active-month">
-    </div>
-  </div>
-
   <h2 class="title">Categorias</h2>
   <div style="padding:0 20px">
     <div class="meta-card">
@@ -517,11 +555,12 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
   <div style="padding:0 20px">
     <div class="meta-card">
       <div class="mt">Exportar dados</div>
-      <div class="md">Salva todos os seus lançamentos, categorias e configurações em um arquivo</div>
+      <div class="md">Salva todos os seus lançamentos, categorias e configurações em um arquivo. Os dados ficam só neste celular — guarde o arquivo no Drive ou WhatsApp.</div>
       <div class="btn-row">
         <button class="btn" id="btn-export-json">Exportar JSON</button>
         <button class="btn secondary" id="btn-export-csv">CSV</button>
       </div>
+      <div class="backup-note" id="backup-info"></div>
     </div>
     <div class="meta-card">
       <div class="mt">Importar dados</div>
@@ -537,7 +576,7 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
   </div>
 
   <div style="padding:24px 20px;text-align:center;color:var(--text-faint);font-size:11px">
-    Cronos · feito por você, pra você
+    Cronos 2.0 · feito por você, pra você
   </div>
 </section>
 
@@ -570,6 +609,7 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
       <label>Descrição</label>
       <input type="text" id="m-desc" placeholder="Ex.: Mercado, Café, Conta de luz">
       <div id="m-suggestion" style="display:none"></div>
+      <div id="m-quick-wrap" style="display:none"><div class="quick-label">Frequentes</div><div class="quick" id="m-quick"></div></div>
     </div>
 
     <div class="field">
@@ -613,6 +653,7 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
     <button class="btn" id="m-salvar">Salvar lançamento</button>
     <div class="btn-row" id="m-edit-actions" style="display:none">
       <button class="btn danger" id="m-remover">Remover</button>
+      <button class="btn danger" id="m-remover-parc" style="display:none">Todas as parcelas</button>
       <button class="btn secondary" id="m-cancel">Cancelar</button>
     </div>
     <button class="btn secondary" id="m-close" style="margin-top:8px">Fechar</button>
@@ -793,6 +834,9 @@ function setTheme(theme){
   if(currentPage === 'dashboard') setTimeout(renderDashboard, 50);
 }
 
+function hojeISO(d){ d = d || new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function mesAtualISO(){ return hojeISO().substring(0,7); }
+function vibrar(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
 function fmt(v){ return v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}); }
 function fmtShort(v){ if(v >= 1000) return 'R$ '+(v/1000).toFixed(1)+'k'; return 'R$ '+Math.round(v); }
 function parseVal(s){
@@ -898,9 +942,15 @@ function renderHome(){
   const byCat = {};
   lancs.forEach(l => byCat[l.cat] = (byCat[l.cat]||0) + l.valor);
   const cats = Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+  renderInsights(lancs, total);
+  renderBackupAlert();
+  const recentes = [...lancs].sort((a,b)=> b.data.localeCompare(a.data) || b.id - a.id).slice(0,5);
+  document.getElementById('recent-wrap').style.display = recentes.length ? '' : 'none';
+  document.getElementById('recent-list').innerHTML = recentes.map(l=>lancRowHTML(l, true)).join('');
+
   const listEl = document.getElementById('category-list');
   if(cats.length === 0){
-    listEl.innerHTML = '<div class="empty"><div class="ei">○</div><div class="et">Nenhum lançamento ainda</div></div>';
+    listEl.innerHTML = '<div class="empty" style="padding:40px 20px"><div class="ei">○</div><div class="et">Nenhum lançamento neste mês</div><div style="font-size:12px;margin-top:8px">Toque em <b style="color:var(--accent)">+</b> ou no 🎙️ para lançar um gasto</div></div>';
   } else {
     listEl.innerHTML = cats.map(([catId, v])=>{
       const cat = categoria(catId);
@@ -922,6 +972,117 @@ function renderHome(){
   }
 }
 
+
+// ================= v2: helpers de experiência =================
+const MESES_CURTOS = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function fmtDateFull(iso){ const [y,m,d] = iso.split('-'); return d+'/'+m+'/'+y; }
+function addMonths(yyyymm, delta){ const [y,m] = yyyymm.split('-').map(Number); const d = new Date(y, m-1+delta, 1); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+function totalMes(yyyymm, ateDia){
+  return state.lancamentos.filter(l=> getMonth(l.data)===yyyymm && (!ateDia || parseInt(l.data.substring(8,10)) <= ateDia)).reduce((s,l)=>s+l.valor, 0);
+}
+
+function lancRowHTML(l, compacto, comAno){
+  const cat = categoria(l.cat);
+  const recIcon = l.recId ? '<span style="font-size:11px;color:var(--accent-dim);margin-left:6px" title="Gasto recorrente">↻</span>' : '';
+  const parcBadge = l.parcId ? '<span style="font-size:10px;color:var(--accent);background:var(--accent-bg);border:1px solid rgba(147,197,253,0.2);padding:1px 6px;border-radius:6px;margin-left:6px;font-weight:600">'+l.parcNum+'/'+l.parcTotal+'</span>' : '';
+  const sub = compacto ? cat.nome+' · '+fmtDateLong(l.data) : (comAno ? cat.nome+' · '+fmtDateFull(l.data) : cat.nome);
+  return '<div class="lanc" data-cat="'+l.cat+'" onclick="openEditModal('+l.id+')">'+
+    '<div class="li" style="background:'+cat.cor+'20;color:'+cat.cor+'">'+cat.icone+'</div>'+
+    '<div class="ld"><div class="lt">'+escapeHtml(l.desc)+recIcon+parcBadge+'</div><div class="lc">'+sub+'</div></div>'+
+    '<div class="lv">R$ '+fmt(l.valor)+'</div>'+
+  '</div>';
+}
+
+function renderInsights(lancs, total){
+  const el = document.getElementById('hero-insights');
+  if(!el) return;
+  const chips = [];
+  const atual = mesAtualISO();
+  const ehAtual = state.activeMonth === atual;
+  const anterior = addMonths(state.activeMonth, -1);
+  const nomeAnt = MESES_CURTOS[parseInt(anterior.substring(5,7))-1];
+  // Comparação justa: no mês corrente compara com o mesmo período do mês anterior
+  const diaHoje = new Date().getDate();
+  const base = ehAtual ? totalMes(anterior, diaHoje) : totalMes(anterior);
+  if(base > 0 && total > 0){
+    const diff = (total - base) / base * 100;
+    const up = diff > 0;
+    chips.push('<span class="chip '+(up?'up':'down')+'">'+(up?'▲':'▼')+' '+Math.abs(diff).toFixed(0)+'% vs '+nomeAnt+(ehAtual?' (mesmo período)':'')+'</span>');
+  }
+  if(ehAtual && total > 0 && diaHoje >= 3){
+    const [y,m] = atual.split('-').map(Number);
+    const diasMes = new Date(y, m, 0).getDate();
+    const proj = total / diaHoje * diasMes;
+    chips.push('<span class="chip">Projeção do mês <strong>'+fmtShort(proj)+'</strong></span>');
+  }
+  el.innerHTML = chips.join('');
+  el.style.display = chips.length ? '' : 'none';
+}
+
+function renderBackupAlert(){
+  const el = document.getElementById('backup-alert');
+  if(!el) return;
+  const n = state.lancamentos.length;
+  const hoje = hojeISO();
+  const dias = state.lastBackup ? Math.round((new Date(hoje) - new Date(state.lastBackup)) / 864e5) : 999;
+  const adiado = state.backupSnooze && state.backupSnooze > hoje;
+  if(n >= 15 && dias >= 30 && !adiado){
+    el.innerHTML = '<div class="banner"><span class="bi">🛡️</span><div class="bt"><strong>Proteja seu histórico.</strong> Seus '+n+' lançamentos ficam só neste celular'+(state.lastBackup?' e o último backup tem '+dias+' dias':'')+'.'+
+      '<div style="display:flex;gap:8px;margin-top:10px"><button class="btn" style="margin:0;padding:9px;font-size:13px" onclick="exportJSON()">Fazer backup</button><button class="btn secondary" style="margin:0;padding:9px;font-size:13px" onclick="adiarBackup()">Depois</button></div></div></div>';
+  } else el.innerHTML = '';
+}
+function adiarBackup(){
+  const d = new Date(); d.setDate(d.getDate()+7);
+  state.backupSnooze = hojeISO(d); save(); renderBackupAlert();
+}
+
+// Atalhos: os gastos que você mais repete viram botões de um toque
+function renderQuick(){
+  const wrap = document.getElementById('m-quick-wrap');
+  const box = document.getElementById('m-quick');
+  const lim = new Date(); lim.setDate(lim.getDate()-120);
+  const limISO = hojeISO(lim);
+  const mapa = {};
+  state.lancamentos.filter(l=>l.data >= limISO && !l.parcId).forEach(l=>{
+    const k = l.desc.trim().toLowerCase()+'|'+l.cat;
+    if(!mapa[k]) mapa[k] = {desc:l.desc.trim(), cat:l.cat, n:0, valores:{}};
+    mapa[k].n++;
+    mapa[k].valores[l.valor] = (mapa[k].valores[l.valor]||0)+1;
+  });
+  const top = Object.values(mapa).filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,8);
+  if(!top.length){ wrap.style.display='none'; return; }
+  window._quick = top;
+  box.innerHTML = top.map((q,i)=>'<button type="button" onclick="usarAtalho('+i+')">'+categoria(q.cat).icone+' '+escapeHtml(q.desc)+'</button>').join('');
+  wrap.style.display = '';
+}
+function usarAtalho(i){
+  const q = (window._quick||[])[i];
+  if(!q) return;
+  document.getElementById('m-desc').value = q.desc;
+  selectCat(q.cat);
+  // se o valor costuma se repetir, já preenche
+  const [val, vezes] = Object.entries(q.valores).sort((a,b)=>b[1]-a[1])[0];
+  const atual = parseVal(document.getElementById('m-valor').value);
+  if(vezes >= 2 && (!atual || isNaN(atual))){
+    document.getElementById('m-valor').value = formatCaixa(String(Math.round(parseFloat(val)*100)));
+    updateParcHint();
+  }
+  vibrar(8);
+}
+
+// Toast com ação (ex.: Desfazer)
+function showToastAction(msg, label, fn, ms){
+  const t = document.getElementById('toast');
+  t.innerHTML = '<span>'+escapeHtml(msg)+'</span><button class="tbtn">'+escapeHtml(label)+'</button>';
+  t.classList.add('show','action');
+  t.querySelector('.tbtn').onclick = ()=>{ clearTimeout(t._tm); t.classList.remove('show','action'); fn(); };
+  clearTimeout(t._tm);
+  t._tm = setTimeout(()=>t.classList.remove('show','action'), ms||5000);
+}
+
+// Busca no histórico
+let searchQuery = '';
+
 let activeFilter = null;
 
 function filterByCategory(catId){
@@ -936,6 +1097,23 @@ function clearFilter(){
 }
 
 function renderLancamentos(){
+  const q = vozNorm(searchQuery.trim());
+  if(q){
+    const res = state.lancamentos.filter(l=> vozNorm(l.desc).includes(q) || vozNorm(categoria(l.cat).nome).includes(q))
+      .sort((a,b)=> b.data.localeCompare(a.data) || b.id - a.id);
+    const tot = res.reduce((s,l)=>s+l.valor,0);
+    document.getElementById('lanc-count-hero').innerHTML = res.length+' resultado'+(res.length!==1?'s':'')+'<span style="display:block;font-size:13px;color:var(--text-dim);font-weight:400;margin-top:4px">em todos os meses · R$ '+fmt(tot)+'</span>';
+    const listQ = document.getElementById('lancamentos-list');
+    if(!res.length){ listQ.innerHTML = '<div class="empty"><div class="ei">⌕</div><div class="et">Nada encontrado para “'+escapeHtml(searchQuery.trim())+'”</div></div>'; return; }
+    const porMes = {};
+    res.forEach(l=>{ const k=getMonth(l.data); (porMes[k]=porMes[k]||[]).push(l); });
+    const nomes = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    listQ.innerHTML = Object.keys(porMes).sort((a,b)=>b.localeCompare(a)).map(k=>{
+      const its = porMes[k]; const st = its.reduce((s,l)=>s+l.valor,0);
+      return '<div class="lanc-group"><div class="lanc-date">'+nomes[parseInt(k.substring(5,7))-1]+' '+k.substring(0,4)+' · R$ '+fmt(st)+'</div>'+its.map(l=>lancRowHTML(l,false,true)).join('')+'</div>';
+    }).join('');
+    return;
+  }
   let lancs = getActiveLancs().sort((a,b)=> b.data.localeCompare(a.data) || b.id - a.id);
   const allLancsCount = lancs.length;
 
@@ -1030,6 +1208,27 @@ function renderDashboard(){
   Chart.defaults.color = cTick;
   Chart.defaults.font.family = 'Outfit, -apple-system, system-ui, sans-serif';
   Chart.defaults.font.size = 11;
+
+  // Evolução: 6 meses terminando no mês selecionado
+  const meses6 = [5,4,3,2,1,0].map(k=>addMonths(state.activeMonth, -k));
+  const tot6 = meses6.map(m=>totalMes(m));
+  const comDados = tot6.filter(v=>v>0);
+  const media6 = comDados.length ? comDados.reduce((a,b)=>a+b,0)/comDados.length : 0;
+  const maxI = tot6.indexOf(Math.max(...tot6));
+  document.getElementById('month-stats').innerHTML =
+    '<div><span>Média mensal</span><b>R$ '+fmt(media6)+'</b></div>'+
+    '<div><span>Mês mais caro</span><b>'+(tot6[maxI]>0 ? MESES_CURTOS[parseInt(meses6[maxI].substring(5,7))-1]+' · '+fmtShort(tot6[maxI]) : '—')+'</b></div>';
+  const corAtiva = isLight ? '#2563eb' : '#93c5fd';
+  const corBase = isLight ? 'rgba(37,99,235,0.22)' : 'rgba(147,197,253,0.22)';
+  charts.months = new Chart(document.getElementById('chart-months'), {
+    type:'bar',
+    data:{ labels: meses6.map(m=>MESES_CURTOS[parseInt(m.substring(5,7))-1]),
+      datasets:[{ data: tot6, backgroundColor: meses6.map((m,i)=> i===5 ? corAtiva : corBase), borderRadius:8, borderSkipped:false, maxBarThickness:34 }] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      onClick:(e,els)=>{ if(els.length){ state.activeMonth = meses6[els[0].index]; activeFilter=null; renderAll(); } },
+      plugins:{ legend:{display:false}, tooltip:{ backgroundColor:cTipBg, borderColor:cTipBorder, borderWidth:1, padding:10, titleColor:cTipTitle, bodyColor:cTipBody, callbacks:{ label:(c)=>' R$ '+fmt(c.parsed.y) } } },
+      scales:{ x:{ grid:{display:false}, ticks:{color:cTickStrong} }, y:{ beginAtZero:true, grid:{color:cGrid}, ticks:{color:cTick, callback:v=>fmtShort(v)} } } }
+  });
 
   if(cats.length > 0){
     charts.pie = new Chart(document.getElementById('chart-pie'), {
@@ -1220,7 +1419,7 @@ function deleteRecurring(id){
 
 function processRecurrings(){
   const today = new Date();
-  const currentMonth = today.toISOString().substring(0,7);
+  const currentMonth = hojeISO(today).substring(0,7);
   let generated = 0;
 
   state.recurrings.filter(r=>r.active).forEach(rec=>{
@@ -1287,7 +1486,8 @@ function deleteGoal(id){
 }
 
 function renderConfig(){
-  document.getElementById('active-month').value = state.activeMonth;
+  const bn = document.getElementById('backup-info');
+  if(bn) bn.textContent = state.lastBackup ? 'Último backup: '+fmtDateFull(state.lastBackup) : 'Você ainda não fez nenhum backup.';
 }
 
 function renderAll(){
@@ -1303,7 +1503,7 @@ function updateMonthPill(){
   const [y,m] = state.activeMonth.split('-');
   const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
   const pill = document.getElementById('month-pill');
-  const currentRealMonth = new Date().toISOString().substring(0,7);
+  const currentRealMonth = mesAtualISO();
   const isCurrentMonth = state.activeMonth === currentRealMonth;
   pill.textContent = meses[parseInt(m)-1]+' · '+y;
   // Destaca visualmente quando não está no mês atual
@@ -1325,7 +1525,7 @@ function changeMonth(delta){
 }
 
 function goToCurrentMonth(){
-  const currentRealMonth = new Date().toISOString().substring(0,7);
+  const currentRealMonth = mesAtualISO();
   if(state.activeMonth !== currentRealMonth){
     state.activeMonth = currentRealMonth;
     activeFilter = null;
@@ -1340,6 +1540,7 @@ let navigatingViaPopstate = false;
 function showPage(page, fromPopstate){
   if(currentPage === 'lancamentos' && page !== 'lancamentos'){
     activeFilter = null;
+    if(searchQuery){ searchQuery=''; const si=document.getElementById('lanc-search'); if(si){ si.value=''; document.getElementById('search-box').classList.remove('has'); } }
   }
   currentPage = page;
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -1364,6 +1565,7 @@ function showPage(page, fromPopstate){
 window.addEventListener('popstate', (e)=>{
   navigatingViaPopstate = true;
 
+  if(modalIgnorePop){ modalIgnorePop = false; navigatingViaPopstate = false; return; }
   // Tela de voz: o voltar só fecha a escuta
   if(vozIgnorePop){ vozIgnorePop = false; navigatingViaPopstate = false; return; }
   if(vozAberta){
@@ -1481,8 +1683,20 @@ function openModal(){
   document.body.style.overflow = 'hidden';
   if(!navigatingViaPopstate) history.pushState({modal:'lanc'}, '', '#modal');
 }
+let modalIgnorePop = false;
+function popModalHistory(){
+  if(!navigatingViaPopstate && location.hash.indexOf('#modal') === 0){ modalIgnorePop = true; history.back(); }
+}
+function fecharSheet(id){
+  const el = document.getElementById(id);
+  if(!el || !el.classList.contains('show')) return;
+  el.classList.remove('show');
+  popModalHistory();
+}
 function closeModal(){
+  const estavaAberto = document.getElementById('modal-lanc').classList.contains('show');
   document.getElementById('modal-lanc').classList.remove('show');
+  if(estavaAberto) popModalHistory();
   document.body.style.overflow = '';
   editingId = null;
   document.getElementById('m-edit-actions').style.display = 'none';
@@ -1552,7 +1766,7 @@ function openNewModal(){
   document.getElementById('modal-title').textContent = 'Novo lançamento';
   document.getElementById('m-valor').value = 'R$ 0,00';
   document.getElementById('m-desc').value = '';
-  document.getElementById('m-data').value = new Date().toISOString().substring(0,10);
+  document.getElementById('m-data').value = hojeISO();
   selectedCat = 'outros';
   recEnabled = false;
   parcEnabled = false;
@@ -1564,6 +1778,7 @@ function openNewModal(){
   document.getElementById('m-suggestion').style.display = 'none';
   document.getElementById('m-voice-note').classList.remove('show');
   document.getElementById('m-mic').style.display = '';
+  renderQuick();
   document.getElementById('m-edit-actions').style.display = 'none';
   document.getElementById('m-salvar').style.display = 'block';
   openModal();
@@ -1594,6 +1809,10 @@ function openEditModal(id){
   document.getElementById('m-suggestion').style.display = 'none';
   document.getElementById('m-voice-note').classList.remove('show');
   document.getElementById('m-mic').style.display = 'none';
+  document.getElementById('m-quick-wrap').style.display = 'none';
+  const bp = document.getElementById('m-remover-parc');
+  if(l.parcId){ const np = state.lancamentos.filter(x=>x.parcId===l.parcId).length; bp.textContent = 'Todas as '+np+' parcelas'; bp.style.display = np>1 ? '' : 'none'; }
+  else bp.style.display = 'none';
   document.getElementById('m-edit-actions').style.display = 'flex';
   document.getElementById('m-salvar').style.display = 'block';
   openModal();
@@ -1656,6 +1875,7 @@ function saveLanc(){
     showToast(recEnabled ? 'Lançamento adicionado · será recorrente' : 'Lançamento adicionado');
   }
   save();
+  vibrar(12);
   state.activeMonth = getMonth(data);
   renderAll();
   closeModal();
@@ -1676,18 +1896,29 @@ function createRecurring(lanc, valor){
   return rec;
 }
 
-function removeLanc(){
+function removeLanc(todasParcelas){
   if(!editingId) return;
-  if(!confirm('Remover este lançamento?')) return;
-  state.lancamentos = state.lancamentos.filter(l=>l.id!==editingId);
+  const alvo = state.lancamentos.find(l=>l.id===editingId);
+  if(!alvo) return;
+  const removidos = todasParcelas===true && alvo.parcId
+    ? state.lancamentos.filter(l=>l.parcId===alvo.parcId)
+    : [alvo];
+  const ids = new Set(removidos.map(l=>l.id));
+  state.lancamentos = state.lancamentos.filter(l=>!ids.has(l.id));
   save();
   renderAll();
   closeModal();
-  showToast('Lançamento removido');
+  vibrar(25);
+  showToastAction(removidos.length>1 ? removidos.length+' parcelas removidas' : 'Lançamento removido', 'Desfazer', ()=>{
+    state.lancamentos.push(...removidos);
+    save(); renderAll();
+    showToast('Restaurado');
+  });
 }
 
 function showToast(msg){
   const t = document.getElementById('toast');
+  t.classList.remove('action');
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(t._tm);
@@ -1695,14 +1926,19 @@ function showToast(msg){
 }
 
 function exportJSON(){
-  const data = JSON.stringify(state, null, 2);
+  const data = JSON.stringify(Object.assign({}, state, {lastBackup: hojeISO(), backupSnooze: null}), null, 2);
   const blob = new Blob([data], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'cronos-backup-'+new Date().toISOString().substring(0,10)+'.json';
+  a.download = 'cronos-backup-'+hojeISO()+'.json';
   a.click();
   URL.revokeObjectURL(url);
+  state.lastBackup = hojeISO();
+  state.backupSnooze = null;
+  save();
+  renderBackupAlert();
+  renderConfig();
   showToast('Backup exportado');
 }
 
@@ -1717,7 +1953,7 @@ function exportCSV(){
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'cronos-'+new Date().toISOString().substring(0,10)+'.csv';
+  a.download = 'cronos-'+hojeISO()+'.csv';
   a.click();
   URL.revokeObjectURL(url);
   showToast('CSV exportado');
@@ -1744,7 +1980,7 @@ function importJSON(file){
 function resetAll(){
   if(!confirm('Tem certeza? Isso apaga TUDO.')) return;
   if(!confirm('Última chance. Continuar com a exclusão?')) return;
-  state = { lancamentos:[], budget:0, catLimits:{}, goals:[], activeMonth: new Date().toISOString().substring(0,7), nextId:1 };
+  state = { lancamentos:[], budget:0, catLimits:{}, goals:[], activeMonth: mesAtualISO(), nextId:1 };
   save();
   renderAll();
   showPage('home');
@@ -1759,7 +1995,8 @@ document.getElementById('fab').addEventListener('click', openNewModal);
 document.getElementById('m-close').addEventListener('click', closeModal);
 document.getElementById('m-cancel').addEventListener('click', closeModal);
 document.getElementById('m-salvar').addEventListener('click', saveLanc);
-document.getElementById('m-remover').addEventListener('click', removeLanc);
+document.getElementById('m-remover').addEventListener('click', ()=>removeLanc(false));
+document.getElementById('m-remover-parc').addEventListener('click', ()=>removeLanc(true));
 document.getElementById('modal-lanc').addEventListener('click', (e)=>{
   if(e.target.id === 'modal-lanc') closeModal();
 });
@@ -1821,7 +2058,7 @@ document.getElementById('btn-add-goal').addEventListener('click', ()=>{
 });
 
 document.getElementById('g-close').addEventListener('click', ()=>{
-  document.getElementById('modal-goal').classList.remove('show');
+  fecharSheet('modal-goal');
 });
 
 document.getElementById('g-save').addEventListener('click', ()=>{
@@ -1832,19 +2069,14 @@ document.getElementById('g-save').addEventListener('click', ()=>{
   state.goals.push({ id: Date.now(), name, target, current });
   save();
   renderMetas();
-  document.getElementById('modal-goal').classList.remove('show');
+  fecharSheet('modal-goal');
   showToast('Meta criada');
 });
 
 document.getElementById('modal-goal').addEventListener('click', (e)=>{
-  if(e.target.id === 'modal-goal') document.getElementById('modal-goal').classList.remove('show');
+  if(e.target.id === 'modal-goal') fecharSheet('modal-goal');
 });
 
-document.getElementById('active-month').addEventListener('change', (e)=>{
-  state.activeMonth = e.target.value;
-  save();
-  renderAll();
-});
 
 document.getElementById('btn-export-json').addEventListener('click', exportJSON);
 document.getElementById('btn-export-csv').addEventListener('click', exportCSV);
@@ -1961,7 +2193,7 @@ document.getElementById('ce-save').addEventListener('click', ()=>{
     save();
     renderAll();
     renderCatsEditList();
-    document.getElementById('modal-cat-edit').classList.remove('show');
+    fecharSheet('modal-cat-edit');
     showToast('Categoria atualizada');
   } else {
     const baseId = 'cat_' + nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').substring(0, 20);
@@ -1972,17 +2204,17 @@ document.getElementById('ce-save').addEventListener('click', ()=>{
     save();
     renderAll();
     renderCatsEditList();
-    document.getElementById('modal-cat-edit').classList.remove('show');
+    fecharSheet('modal-cat-edit');
     showToast('Categoria criada');
   }
 });
 
 document.getElementById('ce-cancel').addEventListener('click', ()=>{
-  document.getElementById('modal-cat-edit').classList.remove('show');
+  fecharSheet('modal-cat-edit');
 });
 
 document.getElementById('modal-cat-edit').addEventListener('click', (e)=>{
-  if(e.target.id==='modal-cat-edit') document.getElementById('modal-cat-edit').classList.remove('show');
+  if(e.target.id==='modal-cat-edit') fecharSheet('modal-cat-edit');
 });
 
 document.getElementById('btn-manage-cats').addEventListener('click', ()=>{
@@ -1992,11 +2224,11 @@ document.getElementById('btn-manage-cats').addEventListener('click', ()=>{
 });
 
 document.getElementById('cats-close').addEventListener('click', ()=>{
-  document.getElementById('modal-cats').classList.remove('show');
+  fecharSheet('modal-cats');
 });
 
 document.getElementById('modal-cats').addEventListener('click', (e)=>{
-  if(e.target.id==='modal-cats') document.getElementById('modal-cats').classList.remove('show');
+  if(e.target.id==='modal-cats') fecharSheet('modal-cats');
 });
 
 
@@ -2128,6 +2360,7 @@ function abrirVoz(destino){
     return;
   }
   vozDestino = destino || 'novo';
+  vibrar(10);
   vozFinal=''; vozAlts=[];
   document.getElementById('voice-bg').classList.add('show');
   vozAberta = true;
@@ -2238,7 +2471,7 @@ function aplicarVoz(p){
 
 load();
 // Sempre abre no mês atual (conforme a data real do celular)
-state.activeMonth = new Date().toISOString().substring(0,7);
+state.activeMonth = mesAtualISO();
 // Aplica o tema salvo
 applyTheme(state.theme || 'dark');
 // Persiste eventuais migrações feitas no load (ex: cor de Presentes)
@@ -2252,6 +2485,29 @@ document.getElementById('month-next').addEventListener('click', ()=>changeMonth(
 document.getElementById('month-pill').addEventListener('click', goToCurrentMonth);
 
 document.getElementById('m-parc-num').addEventListener('input', updateParcHint);
+
+// Busca no histórico
+(function(){
+  const inp = document.getElementById('lanc-search');
+  const box = document.getElementById('search-box');
+  let tm = null;
+  inp.addEventListener('input', ()=>{
+    box.classList.toggle('has', !!inp.value);
+    clearTimeout(tm);
+    tm = setTimeout(()=>{ searchQuery = inp.value; renderLancamentos(); }, 120);
+  });
+  document.getElementById('lanc-search-clear').addEventListener('click', ()=>{
+    inp.value=''; searchQuery=''; box.classList.remove('has'); renderLancamentos(); inp.blur();
+  });
+})();
+
+// Pede ao Android para não apagar os dados do app quando faltar espaço
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+
+// Funciona sem internet e atualiza sozinho quando houver versão nova
+if('serviceWorker' in navigator && location.protocol === 'https:'){
+  window.addEventListener('load', ()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
 
 // Voz
 document.getElementById('fab-mic').addEventListener('click', ()=>abrirVoz('novo'));
