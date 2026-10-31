@@ -2,7 +2,7 @@
 // - Abre mesmo sem internet (guarda o app, ícones, fontes e a biblioteca de gráficos)
 // - Página principal: abre na hora pela cópia guardada e baixa a versão nova em segundo plano
 //   (a atualização aparece na abertura seguinte)
-const VERSION = 'cronos-v3';
+const VERSION = 'cronos-v4';
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {

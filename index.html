@@ -403,7 +403,7 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
 
 <section class="section active" id="page-home">
   <div class="hero">
-    <div class="label">Total do mês</div>
+    <div class="label" id="hero-label">Total do mês</div>
     <div class="total"><span class="currency">R$</span><span id="hero-total">0,00</span></div>
     <div class="meta">
       <span><strong id="hero-count">0</strong> lançamentos</span>
@@ -542,6 +542,19 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
     </div>
   </div>
 
+  <h2 class="title">Mês financeiro</h2>
+  <div style="padding:0 20px">
+    <div class="meta-card">
+      <div class="mt">Fechamento da fatura</div>
+      <div class="md">Os gastos são somados a partir do dia escolhido até a véspera dele no mês seguinte. Com dia 3, o período vai de 03/10 a 02/11.</div>
+      <div class="field" style="display:flex;align-items:center;gap:10px;margin:12px 0 0">
+        <span style="font-size:13px;color:var(--text-dim);white-space:nowrap">Começa no dia</span>
+        <select id="sel-fech"></select>
+      </div>
+      <div class="backup-note" id="fech-info"></div>
+    </div>
+  </div>
+
   <h2 class="title">Categorias</h2>
   <div style="padding:0 20px">
     <div class="meta-card">
@@ -576,7 +589,7 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
   </div>
 
   <div style="padding:24px 20px;text-align:center;color:var(--text-faint);font-size:11px">
-    Cronos 2.0 · feito por você, pra você
+    Cronos 2.1 · feito por você, pra você
   </div>
 </section>
 
@@ -795,6 +808,7 @@ function load(){
       if(!state.nextRecId) state.nextRecId = 1;
       if(!state.activeMonth) state.activeMonth = '2026-05';
       if(!state.theme) state.theme = 'dark';
+      if(state.diaFechamento === undefined){ state.diaFechamento = 3; migrarRecorrentesFech(); }
       if(state.categorias && Array.isArray(state.categorias) && state.categorias.length > 0){
         CATEGORIAS = state.categorias;
         // Migração de paleta: atualiza as cores das categorias padrão para a nova paleta harmônica.
@@ -835,7 +849,22 @@ function setTheme(theme){
 }
 
 function hojeISO(d){ d = d || new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-function mesAtualISO(){ return hojeISO().substring(0,7); }
+function mesAtualISO(){ return getMonth(hojeISO()); }
+// ===== Período financeiro: começa no dia de fechamento da fatura (ex.: 03 → de 03/10 a 02/11) =====
+function diaFech(){ const d = parseInt(typeof state!=='undefined' && state ? state.diaFechamento : 1); return d>=1 && d<=28 ? d : 1; }
+function inicioPeriodo(ym){ const [y,m] = ym.split('-').map(Number); return new Date(y, m-1, diaFech()); }
+function diasPeriodo(ym){ return Math.round((inicioPeriodo(addMonths(ym,1)) - inicioPeriodo(ym)) / 864e5); }
+function diaDoPeriodo(iso, ym){ const [y,m,d] = iso.split('-').map(Number); return Math.round((new Date(y,m-1,d) - inicioPeriodo(ym)) / 864e5) + 1; }
+function rotuloPeriodo(ym, comAno){
+  const a = inicioPeriodo(ym), b = new Date(inicioPeriodo(addMonths(ym,1))); b.setDate(b.getDate()-1);
+  const f = d => String(d.getDate()).padStart(2,'0')+' '+MESES_CURTOS[d.getMonth()];
+  return f(a)+' – '+f(b)+(comAno ? ' '+b.getFullYear() : '');
+}
+function migrarRecorrentesFech(){ // lançamentos fixos gerados no dia 01 passam para o 1º dia do período
+  const df = diaFech(); if(df<=1) return 0; let n = 0;
+  state.lancamentos.forEach(l=>{ if(l.recId && parseInt(l.data.substring(8,10)) < df){ l.data = l.data.substring(0,8)+String(df).padStart(2,'0'); n++; } });
+  return n;
+}
 function vibrar(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
 function fmt(v){ return v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}); }
 function fmtShort(v){ if(v >= 1000) return 'R$ '+(v/1000).toFixed(1)+'k'; return 'R$ '+Math.round(v); }
@@ -853,7 +882,7 @@ function fmtDateLong(iso){
   const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
   return parseInt(d)+' de '+meses[parseInt(m)-1];
 }
-function getMonth(iso){ return iso.substring(0,7); }
+function getMonth(iso){ const ym = iso.substring(0,7), df = diaFech(); return (df>1 && parseInt(iso.substring(8,10)) < df) ? addMonths(ym,-1) : ym; }
 function categoria(id){ return CATEGORIAS.find(c=>c.id===id) || CATEGORIAS[CATEGORIAS.length-1]; }
 
 function sugerirCategoria(desc){
@@ -891,6 +920,7 @@ function renderHome(){
   const total = lancs.reduce((s,l)=>s+l.valor, 0);
 
   document.getElementById('hero-total').textContent = fmt(total);
+  document.getElementById('hero-label').textContent = diaFech()>1 ? 'Total do período' : 'Total do mês';
   document.getElementById('hero-count').textContent = lancs.length;
 
   const datas = new Set(lancs.map(l=>l.data));
@@ -978,7 +1008,7 @@ const MESES_CURTOS = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out
 function fmtDateFull(iso){ const [y,m,d] = iso.split('-'); return d+'/'+m+'/'+y; }
 function addMonths(yyyymm, delta){ const [y,m] = yyyymm.split('-').map(Number); const d = new Date(y, m-1+delta, 1); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
 function totalMes(yyyymm, ateDia){
-  return state.lancamentos.filter(l=> getMonth(l.data)===yyyymm && (!ateDia || parseInt(l.data.substring(8,10)) <= ateDia)).reduce((s,l)=>s+l.valor, 0);
+  return state.lancamentos.filter(l=> getMonth(l.data)===yyyymm && (!ateDia || diaDoPeriodo(l.data, yyyymm) <= ateDia)).reduce((s,l)=>s+l.valor, 0);
 }
 
 function lancRowHTML(l, compacto, comAno){
@@ -1002,7 +1032,7 @@ function renderInsights(lancs, total){
   const anterior = addMonths(state.activeMonth, -1);
   const nomeAnt = MESES_CURTOS[parseInt(anterior.substring(5,7))-1];
   // Comparação justa: no mês corrente compara com o mesmo período do mês anterior
-  const diaHoje = new Date().getDate();
+  const diaHoje = diaDoPeriodo(hojeISO(), atual);
   const base = ehAtual ? totalMes(anterior, diaHoje) : totalMes(anterior);
   if(base > 0 && total > 0){
     const diff = (total - base) / base * 100;
@@ -1010,10 +1040,9 @@ function renderInsights(lancs, total){
     chips.push('<span class="chip '+(up?'up':'down')+'">'+(up?'▲':'▼')+' '+Math.abs(diff).toFixed(0)+'% vs '+nomeAnt+(ehAtual?' (mesmo período)':'')+'</span>');
   }
   if(ehAtual && total > 0 && diaHoje >= 3){
-    const [y,m] = atual.split('-').map(Number);
-    const diasMes = new Date(y, m, 0).getDate();
+    const diasMes = diasPeriodo(atual);
     const proj = total / diaHoje * diasMes;
-    chips.push('<span class="chip">Projeção do mês <strong>'+fmtShort(proj)+'</strong></span>');
+    chips.push('<span class="chip">Projeção '+(diaFech()>1?'da fatura':'do mês')+' <strong>'+fmtShort(proj)+'</strong></span>');
   }
   el.innerHTML = chips.join('');
   el.style.display = chips.length ? '' : 'none';
@@ -1110,7 +1139,7 @@ function renderLancamentos(){
     const nomes = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
     listQ.innerHTML = Object.keys(porMes).sort((a,b)=>b.localeCompare(a)).map(k=>{
       const its = porMes[k]; const st = its.reduce((s,l)=>s+l.valor,0);
-      return '<div class="lanc-group"><div class="lanc-date">'+nomes[parseInt(k.substring(5,7))-1]+' '+k.substring(0,4)+' · R$ '+fmt(st)+'</div>'+its.map(l=>lancRowHTML(l,false,true)).join('')+'</div>';
+      return '<div class="lanc-group"><div class="lanc-date">'+(diaFech()>1 ? rotuloPeriodo(k,true) : nomes[parseInt(k.substring(5,7))-1]+' '+k.substring(0,4))+' · R$ '+fmt(st)+'</div>'+its.map(l=>lancRowHTML(l,false,true)).join('')+'</div>';
     }).join('');
     return;
   }
@@ -1419,7 +1448,7 @@ function deleteRecurring(id){
 
 function processRecurrings(){
   const today = new Date();
-  const currentMonth = hojeISO(today).substring(0,7);
+  const currentMonth = mesAtualISO();
   let generated = 0;
 
   state.recurrings.filter(r=>r.active).forEach(rec=>{
@@ -1427,7 +1456,7 @@ function processRecurrings(){
     while(cursor <= currentMonth){
       const exists = state.lancamentos.some(l => l.recId === rec.id && getMonth(l.data) === cursor);
       if(!exists){
-        const data = cursor + '-01';
+        const data = cursor + '-' + String(diaFech()).padStart(2,'0');
         state.lancamentos.push({
           id: state.nextId++,
           valor: rec.fixedValue,
@@ -1505,7 +1534,7 @@ function updateMonthPill(){
   const pill = document.getElementById('month-pill');
   const currentRealMonth = mesAtualISO();
   const isCurrentMonth = state.activeMonth === currentRealMonth;
-  pill.textContent = meses[parseInt(m)-1]+' · '+y;
+  pill.textContent = diaFech()>1 ? rotuloPeriodo(state.activeMonth, inicioPeriodo(state.activeMonth).getFullYear()!==new Date().getFullYear()) : meses[parseInt(m)-1]+' · '+y;
   // Destaca visualmente quando não está no mês atual
   if(isCurrentMonth){
     pill.style.opacity = '1';
@@ -1981,7 +2010,7 @@ function importJSON(file){
 function resetAll(){
   if(!confirm('Tem certeza? Isso apaga TUDO.')) return;
   if(!confirm('Última chance. Continuar com a exclusão?')) return;
-  state = { lancamentos:[], budget:0, catLimits:{}, goals:[], activeMonth: mesAtualISO(), nextId:1 };
+  state = { lancamentos:[], budget:0, catLimits:{}, goals:[], nextId:1, diaFechamento: 3 }; state.activeMonth = mesAtualISO();
   save();
   renderAll();
   showPage('home');
@@ -2471,6 +2500,12 @@ function aplicarVoz(p){
 }
 
 load();
+(function(){ const sel = document.getElementById('sel-fech'); if(!sel) return;
+  sel.innerHTML = Array.from({length:28},(_,i)=>'<option value="'+(i+1)+'">'+(i===0?'1 (mês do calendário)':String(i+1).padStart(2,'0'))+'</option>').join('');
+  const info = ()=>{ document.getElementById('fech-info').textContent = diaFech()>1 ? 'Período atual: '+rotuloPeriodo(mesAtualISO(), true) : 'Período atual: mês do calendário'; };
+  sel.value = String(diaFech()); info();
+  sel.onchange = ()=>{ state.diaFechamento = parseInt(sel.value); migrarRecorrentesFech(); state.activeMonth = mesAtualISO(); activeFilter = null; save(); renderAll(); info(); showToast(diaFech()>1 ? 'Mês financeiro começa no dia '+diaFech() : 'Mês do calendário'); };
+})();
 // Sempre abre no mês atual (conforme a data real do celular)
 state.activeMonth = mesAtualISO();
 // Aplica o tema salvo
