@@ -1,7 +1,8 @@
 // Cronos — service worker
 // - Abre mesmo sem internet (guarda o app, ícones, fontes e a biblioteca de gráficos)
-// - Página principal: busca primeiro na rede, então cada nova versão publicada chega sozinha
-const VERSION = 'cronos-v2';
+// - Página principal: abre na hora pela cópia guardada e baixa a versão nova em segundo plano
+//   (a atualização aparece na abertura seguinte)
+const VERSION = 'cronos-v3';
 const CORE = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -20,17 +21,14 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
 
-  // Navegação (abrir o app): rede primeiro, cópia guardada se estiver offline
+  // Navegação (abrir o app): mostra a cópia guardada na hora (sem esperar a rede)
   if (req.mode === 'navigate') {
-    e.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(VERSION).then((c) => c.put('./index.html', copy));
-          return res;
-        })
-        .catch(() => caches.match('./index.html'))
-    );
+    const rede = fetch(req).then((res) => {
+      if (res && res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put('./index.html', copy)); }
+      return res;
+    });
+    e.waitUntil(rede.catch(() => {}));
+    e.respondWith(caches.match('./index.html').then((hit) => hit || rede).catch(() => rede));
     return;
   }
 

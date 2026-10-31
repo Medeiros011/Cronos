@@ -732,7 +732,7 @@ html[data-theme="light"] .voice-bg{background:rgba(244,245,247,.9)}
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" defer onload="window.__chartPronto&&__chartPronto()"></script>
 <script>
 const DEFAULT_CATEGORIAS = [
   { id:'mercado', nome:'Mercado', icone:'🛒', cor:'#3B82F6' },
@@ -1535,6 +1535,7 @@ function goToCurrentMonth(){
 }
 
 let currentPage = 'home';
+window.__chartPronto = ()=>{ if(currentPage==='dashboard') renderDashboard(); };
 let navigatingViaPopstate = false;
 
 function showPage(page, fromPopstate){
